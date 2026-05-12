@@ -45,6 +45,17 @@
     <input type="password" id="password" placeholder="Enter Password">
 
     <button onclick="login()">Login</button>
+
+    <p>
+
+New User?
+
+<a href="register.html">
+Create Account
+</a>
+
+</p>
+
 </div>
 
 <script>
@@ -52,19 +63,27 @@
 function login(){
 
     let email = document.getElementById("email").value;
+
     let password = document.getElementById("password").value;
 
-    if(email === "" || password === ""){
-        alert("Please fill all fields");
-    }
-    else{
+    let storedEmail = localStorage.getItem("amazonEmail");
 
-        localStorage.setItem("user", email);
+    let storedPassword = localStorage.getItem("amazonPassword");
+
+    if(email == storedEmail && password == storedPassword){
+
+        localStorage.setItem("amazonUser", email);
 
         alert("Login Successful");
 
         window.location.href = "index.html";
     }
+
+    else{
+
+        alert("Invalid Email or Password");
+    }
+
 }
 
 </script>

@@ -35,6 +35,70 @@
     </div>
 
     <div class="product">
+
+<img src="images/iphone.jpg">
+
+<h3>iPhone 15</h3>
+
+<p>₹79,999</p>
+
+<button onclick="addCart()">Add to Cart</button>
+
+</div>
+
+<div class="product">
+
+<img src="images/shoes.jpg">
+
+<h3>Nike Shoes</h3>
+
+<p>₹4,499</p>
+
+<button onclick="addCart()">Add to Cart</button>
+
+</div>
+
+
+<div class="product">
+
+<img src="images/keyboard.jpg">
+
+<h3>Mechanical Keyboard</h3>
+
+<p>₹2,499</p>
+
+<button onclick="addCart()">Add to Cart</button>
+
+</div>
+
+<div class="product">
+
+<img src="images/mouse.jpg">
+
+<h3>Gaming Mouse</h3>
+
+<p>₹1,499</p>
+
+<button onclick="addCart()">Add to Cart</button>
+
+</div>
+
+<div class="product">
+
+<img src="images/camera.jpg">
+
+<h3>DSLR Camera</h3>
+
+<p>₹45,999</p>
+
+<button onclick="addCart()">Add to Cart</button>
+
+
+</div>
+
+
+
+    <div class="product">
       <img src="https://picsum.photos/300/200?6">
       <h3>Smart Watch</h3>
       <p>$149</p>
@@ -52,7 +116,15 @@
 
   <script>
 
-if(localStorage.getItem("user") == null){
+if(localStorage.getItem("amazonUser") == null){
+
+    window.location.href = "login.html";
+}
+
+function logout(){
+
+    localStorage.removeItem("amazonUser");
+
     window.location.href = "login.html";
 }
 
