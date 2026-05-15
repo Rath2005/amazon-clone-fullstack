@@ -1,9 +1,18 @@
 function addCart(){
-  alert("Item Added to Cart");
+
+    let message = "Product successfully added 🛒";
+
+    alert(message);
 }
+
 function logout(){
 
-    localStorage.removeItem("user");
+    let confirmLogout = confirm("Are you sure you want to logout?");
 
-    window.location.href = "login.html";
+    if(confirmLogout){
+
+        localStorage.removeItem("amazonUser");
+
+        window.location.href = "login.html";
+    }
 }
