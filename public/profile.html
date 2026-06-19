@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="main-header">
+  <div class="nav-belt">
+
+    <div class="nav-logo">
+      <a href="index.html">
+        <h1>amazon<span>clone</span></h1>
+      </a>
+    </div>
+
+    <div style="margin-left:auto">
+      <a href="index.html" class="nav-link-item">
+        Back to Store
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<div class="main-container">
+
+  <div class="profile-card">
+
+    <h1>My Profile</h1>
+
+    <div id="profile-info">
+      Loading...
+    </div>
+
+    <hr style="margin:30px 0">
+
+    <div id="profile-stats">
+
+      <h2>Account Statistics</h2>
+
+      <div style="
+        display:flex;
+        gap:20px;
+        flex-wrap:wrap;
+        margin-top:20px;
+      ">
+
+        <div class="stat-box">
+          <h3 id="orders-count">0</h3>
+          <p>Orders</p>
+        </div>
+
+        <div class="stat-box">
+          <h3 id="wishlist-count">0</h3>
+          <p>Wishlist</p>
+        </div>
+
+        <div class="stat-box">
+          <h3 id="cart-count-profile">0</h3>
+          <p>Cart Items</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <hr style="margin:30px 0">
+
+    <h2>Edit Profile</h2>
+
+    <form id="profile-form">
+
+      <input
+        type="text"
+        id="edit-name"
+        placeholder="Username"
+        style="width:100%;padding:10px;margin:10px 0;"
+      >
+
+      <input
+        type="email"
+        id="edit-email"
+        placeholder="Email"
+        style="width:100%;padding:10px;margin:10px 0;"
+      >
+
+      <button
+        type="submit"
+        style="padding:12px 20px;"
+      >
+        Update Profile
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<hr style="margin:30px 0">
+
+<h2>Change Password</h2>
+
+<form id="password-form">
+
+  <input
+    type="password"
+    id="current-password"
+    placeholder="Current Password"
+    style="width:100%;padding:10px;margin:10px 0;"
+    required
+  >
+
+  <input
+    type="password"
+    id="new-password"
+    placeholder="New Password"
+    style="width:100%;padding:10px;margin:10px 0;"
+    required
+  >
+
+  <input
+    type="password"
+    id="confirm-password"
+    placeholder="Confirm New Password"
+    style="width:100%;padding:10px;margin:10px 0;"
+    required
+  >
+
+  <button type="submit">
+    Change Password
+  </button>
+
+</form>
+
+<script src="profile.js"></script>
+
+</body>
+</html>

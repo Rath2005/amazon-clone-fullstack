@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Amazon Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="nav-belt">
+      <div class="nav-logo">
+        <a href="index.html">
+          <h1>amazon<span>clone</span></h1>
+        </a>
+      </div>
+      <div style="flex-grow: 1; margin-left: 20px; font-size: 18px; font-weight: 500; color: var(--color-white);">
+        Admin Dashboard
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link-item">
+          <span class="nav-link-line1">Back to</span>
+          <span class="nav-link-line2">Storefront</span>
+        </a>
+        <div class="nav-link-item" onclick="handleAdminLogout()" style="cursor: pointer;">
+          <span class="nav-link-line1">Sign Out</span>
+          <span class="nav-link-line2">Log Out</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <div class="admin-header-row">
+      <h2 style="font-size: 26px; font-weight: 600;">Store Management</h2>
+      <span id="admin-user-label" style="color: var(--color-text-muted); font-size: 14px;"></span>
+    </div>
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-panel="dashboard" onclick="switchPanel('dashboard', this)">Dashboard</button>
+      <button class="admin-tab" data-panel="products" onclick="switchPanel('products', this)">Products</button>
+      <button class="admin-tab" data-panel="orders" onclick="switchPanel('orders', this)">Orders</button>
+      <button class="admin-tab" data-panel="users" onclick="switchPanel('users', this)">Users</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <div class="stats-grid" id="stats-grid">
+
+  <div class="stat-card">
+    <h4>Total Products</h4>
+    <div class="stat-value" id="stat-products">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>Total Orders</h4>
+    <div class="stat-value" id="stat-orders">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>Total Users</h4>
+    <div class="stat-value" id="stat-users">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>Pending Orders</h4>
+    <div class="stat-value" id="stat-pending">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>Total Revenue</h4>
+    <div class="stat-value" id="stat-revenue">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>🔥 Top Product</h4>
+    <div class="stat-value" id="stat-top-product">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>🏆 Top Category</h4>
+    <div class="stat-value" id="stat-top-category">—</div>
+  </div>
+
+  <div class="stat-card">
+    <h4>🚚 Processing</h4>
+    <div class="stat-value" id="stat-processing">—</div>
+  </div>
+
+  <div class="stat-card">
+  <h4>✅ Delivered</h4>
+  <div class="stat-value" id="stat-delivered">—</div>
+</div>
+
+<div class="stat-card"
+style="
+margin-top:30px;
+padding:20px;
+width:100%;
+">
+
+<h3>Revenue Analytics</h3>
+
+<div id="revenue-chart">
+
+Loading chart...
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+    <!-- Products -->
+    <div class="admin-panel" id="panel-products">
+      <div class="admin-form-card">
+        <h3 style="margin-bottom: 14px;" id="product-form-title">Add New Product</h3>
+        <form id="product-form" onsubmit="saveProduct(event)">
+          <input type="hidden" id="product-id">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label for="product-name">Name</label>
+              <input type="text" id="product-name" required>
+            </div>
+            <div class="form-group">
+              <label for="product-price">Price (₹)</label>
+              <input type="number" id="product-price" min="0" step="1" required>
+            </div>
+            <div class="form-group">
+              <label for="product-category">Category</label>
+              <select id="product-category" required>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Home">Home</option>
+                <option value="Books">Books</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="product-stock">Stock</label>
+              <input type="number" id="product-stock" min="0" value="10" required>
+            </div>
+            <div class="form-group">
+              <label for="product-rating">Rating</label>
+              <input type="number" id="product-rating" min="0" max="5" step="0.1" value="4.5">
+            </div>
+            <div class="form-group">
+              <label for="product-image">Image URL</label>
+              <input type="text" id="product-image" placeholder="https://..." required>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="product-description">Description</label>
+              <textarea id="product-description" required></textarea>
+            </div>
+          </div>
+          <div style="margin-top: 16px; display: flex; gap: 10px;">
+            <button type="submit" class="admin-btn primary" id="product-save-btn">Save Product</button>
+            <button type="button" class="admin-btn" id="product-cancel-btn" onclick="resetProductForm()" style="display: none;">Cancel Edit</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-table-body">
+            <tr><td colspan="6" style="text-align:center; padding: 24px;">Loading products...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div class="admin-panel" id="panel-orders">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody id="orders-table-body">
+            <tr><td colspan="5" style="text-align:center; padding: 24px;">Loading orders...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Users -->
+    <div class="admin-panel" id="panel-users">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr><td colspan="4" style="text-align:center; padding: 24px;">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    const token = localStorage.getItem("amazonToken");
+    const userStr = localStorage.getItem("amazonUser");
+    let currentUser = null;
+
+    try {
+      if (userStr) currentUser = JSON.parse(userStr);
+    } catch (e) {
+      currentUser = null;
+    }
+
+    if (!token || !currentUser || !currentUser.isAdmin) {
+      window.location.href = "login.html";
+    }
+
+    document.getElementById("admin-user-label").textContent = `Signed in as ${currentUser.username}`;
+
+    const authHeaders = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    };
+
+    const ORDER_STATUSES = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+    let adminProductsCache = [];
+
+    function showToast(message, type = "success") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(20px)";
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function handleAdminLogout() {
+      localStorage.removeItem("amazonToken");
+      localStorage.removeItem("amazonUser");
+      window.location.href = "login.html";
+    }
+
+    function switchPanel(panelName, btn) {
+      document.querySelectorAll(".admin-panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+      document.getElementById(`panel-${panelName}`).classList.add("active");
+      btn.classList.add("active");
+
+      if (panelName === "dashboard") loadStats();
+      if (panelName === "products") loadAdminProducts();
+      if (panelName === "orders") loadAdminOrders();
+      if (panelName === "users") loadAdminUsers();
+    }
+
+    async function adminFetch(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: { ...authHeaders, ...(options.headers || {}) }
+      });
+      const data = await response.json();
+      if (response.status === 401 || response.status === 403) {
+        showToast(data.message || "Access denied.", "error");
+        setTimeout(() => { window.location.href = "login.html"; }, 1200);
+        throw new Error("Unauthorized");
+      }
+      return data;
+    }
+
+    async function loadStats() {
+      try {
+        const data = await adminFetch("/api/admin/stats");
+        if (data.success) {
+          document.getElementById("stat-products").textContent =
+data.stats.totalProducts;
+
+document.getElementById("stat-orders").textContent =
+data.stats.totalOrders;
+
+document.getElementById("stat-users").textContent =
+data.stats.totalUsers;
+
+document.getElementById("stat-pending").textContent =
+data.stats.pendingOrders;
+
+document.getElementById("stat-revenue").textContent =
+`₹${data.stats.totalRevenue.toLocaleString("en-IN")}`;
+
+document.getElementById("stat-top-product").textContent =
+data.stats.topProduct;
+
+document.getElementById("stat-top-category").textContent =
+data.stats.topCategory;
+
+document.getElementById("stat-processing").textContent =
+data.stats.processingOrders;
+
+document.getElementById("stat-delivered").textContent =
+data.stats.deliveredOrders;
+
+document.getElementById(
+"revenue-chart"
+).innerHTML = `
+
+<div style="margin-top:20px">
+
+<p>
+Pending:
+₹${(
+data.stats.pendingRevenue || 0
+).toLocaleString("en-IN")}
+</p>
+
+<p>
+Processing:
+₹${(
+data.stats.processingRevenue || 0
+).toLocaleString("en-IN")}
+</p>
+
+<p>
+Delivered:
+₹${(
+data.stats.deliveredRevenue || 0
+).toLocaleString("en-IN")}
+</p>
+
+</div>
+
+`;
+        }
+      } catch (error) {
+        console.error("Stats error:", error);
+      }
+    }
+
+    async function loadAdminProducts() {
+      try {
+        const data = await adminFetch("/api/admin/products");
+        const tbody = document.getElementById("products-table-body");
+
+        if (!data.success || data.products.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px;">No products found.</td></tr>`;
+          return;
+        }
+
+        adminProductsCache = data.products;
+        tbody.innerHTML = data.products.map((p, index) => `
+          <tr>
+            <td><img src="${p.image}" alt="${p.name}"></td>
+            <td>${p.name}</td>
+            <td>${p.category}</td>
+            <td>₹${Number(p.price).toLocaleString("en-IN")}</td>
+            <td>${p.stock}</td>
+            <td>
+              <div class="admin-actions">
+                <button class="admin-btn" onclick="editProductByIndex(${index})">Edit</button>
+                <button class="admin-btn danger" onclick="deleteProduct('${p._id}', '${p.name}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `).join("");
+      } catch (error) {
+        console.error("Products error:", error);
+      }
+    }
+
+    function editProductByIndex(index) {
+      editProduct(adminProductsCache[index]);
+    }
+
+    function editProduct(product) {
+      document.getElementById("product-id").value = product._id;
+      document.getElementById("product-name").value = product.name;
+      document.getElementById("product-price").value = product.price;
+      document.getElementById("product-category").value = product.category;
+      document.getElementById("product-stock").value = product.stock;
+      document.getElementById("product-rating").value = product.rating || 4.5;
+      document.getElementById("product-image").value = product.image;
+      document.getElementById("product-description").value = product.description;
+      document.getElementById("product-form-title").textContent = "Edit Product";
+      document.getElementById("product-save-btn").textContent = "Update Product";
+      document.getElementById("product-cancel-btn").style.display = "inline-block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetProductForm() {
+      document.getElementById("product-form").reset();
+      document.getElementById("product-id").value = "";
+      document.getElementById("product-stock").value = 10;
+      document.getElementById("product-rating").value = 4.5;
+      document.getElementById("product-form-title").textContent = "Add New Product";
+      document.getElementById("product-save-btn").textContent = "Save Product";
+      document.getElementById("product-cancel-btn").style.display = "none";
+    }
+
+    async function saveProduct(e) {
+      e.preventDefault();
+      const productId = document.getElementById("product-id").value;
+      const payload = {
+        name: document.getElementById("product-name").value.trim(),
+        description: document.getElementById("product-description").value.trim(),
+        price: Number(document.getElementById("product-price").value),
+        image: document.getElementById("product-image").value.trim(),
+        category: document.getElementById("product-category").value,
+        stock: Number(document.getElementById("product-stock").value),
+        rating: Number(document.getElementById("product-rating").value)
+      };
+
+      try {
+        let data;
+        if (productId) {
+          data = await adminFetch(`/api/admin/products/${productId}`, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+          });
+        } else {
+          data = await adminFetch("/api/admin/products", {
+            method: "POST",
+            body: JSON.stringify(payload)
+          });
+        }
+
+        if (data.success) {
+          showToast(productId ? "Product updated." : "Product created.", "success");
+          resetProductForm();
+          loadAdminProducts();
+          loadStats();
+        } else {
+          showToast(data.message || "Failed to save product.", "error");
+        }
+      } catch (error) {
+        console.error("Save product error:", error);
+      }
+    }
+
+    async function deleteProduct(id, name) {
+      if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+
+      try {
+        const data = await adminFetch(`/api/admin/products/${id}`, { method: "DELETE" });
+        if (data.success) {
+          showToast("Product deleted.", "success");
+          loadAdminProducts();
+          loadStats();
+        } else {
+          showToast(data.message || "Failed to delete product.", "error");
+        }
+      } catch (error) {
+        console.error("Delete product error:", error);
+      }
+    }
+
+    async function loadAdminOrders() {
+      try {
+        const data = await adminFetch("/api/admin/orders");
+        const tbody = document.getElementById("orders-table-body");
+
+        if (!data.success || data.orders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 24px;">No orders yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = data.orders.map(order => {
+          const date = new Date(order.createdAt).toLocaleDateString("en-IN");
+          const options = ORDER_STATUSES.map(s =>
+            `<option value="${s}" ${s === order.status ? "selected" : ""}>${s}</option>`
+          ).join("");
+
+          return `
+            <tr>
+              <td style="font-family: monospace; font-size: 12px;">${order._id}</td>
+              <td>${date}</td>
+              <td>₹${Number(order.totalPrice).toLocaleString("en-IN")}</td>
+              <td><span class="order-status-badge status-${order.status.toLowerCase()}">${order.status}</span></td>
+              <td>
+                <select onchange="updateOrderStatus('${order._id}', this.value)" style="padding: 6px 8px; border-radius: 4px; border: 1px solid var(--color-border);">
+                  ${options}
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      } catch (error) {
+        console.error("Orders error:", error);
+      }
+    }
+
+    async function updateOrderStatus(orderId, status) {
+      try {
+        const data = await adminFetch(`/api/admin/orders/${orderId}/status`, {
+          method: "PUT",
+          body: JSON.stringify({ status })
+        });
+        if (data.success) {
+          showToast(`Order status updated to ${status}.`, "success");
+          loadAdminOrders();
+          loadStats();
+        } else {
+          showToast(data.message || "Failed to update status.", "error");
+        }
+      } catch (error) {
+        console.error("Update status error:", error);
+      }
+    }
+
+    async function loadAdminUsers() {
+      try {
+        const data = await adminFetch("/api/admin/users");
+        const tbody = document.getElementById("users-table-body");
+
+        if (!data.success || data.users.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 24px;">No users found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = data.users.map(u => `
+          <tr>
+            <td>${u.username}</td>
+            <td>${u.email}</td>
+            <td>${u.isAdmin ? "Admin" : "Customer"}</td>
+            <td>${new Date(u.createdAt).toLocaleDateString("en-IN")}</td>
+          </tr>
+        `).join("");
+      } catch (error) {
+        console.error("Users error:", error);
+      }
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>

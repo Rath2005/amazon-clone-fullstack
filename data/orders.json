@@ -1,0 +1,146 @@
+[
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "wr84aonhpngaikl757b9fl",
+        "name": "iPhone 15",
+        "quantity": 2,
+        "price": 79999,
+        "image": "images/iphone.jpg"
+      }
+    ],
+    "shippingAddress": {
+      "country": "India",
+      "street": "456 Mall Road",
+      "state": "Maharashtra",
+      "zipCode": "400001",
+      "city": "Mumbai"
+    },
+    "paymentMethod": "Card",
+    "totalPrice": 159998,
+    "status": "Processing",
+    "createdAt": "2026-06-16T10:25:28.518Z",
+    "_id": "6buuydyfje4nhhs7pt5al"
+  },
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "wr84aonhpngaikl757b9fl",
+        "name": "iPhone 15",
+        "quantity": 1,
+        "price": 79999,
+        "image": "images/iphone.jpg"
+      }
+    ],
+    "shippingAddress": {
+      "street": "123 St",
+      "city": "Delhi",
+      "state": "DL",
+      "zipCode": "110001",
+      "country": "India"
+    },
+    "paymentMethod": "Card",
+    "totalPrice": 79999,
+    "status": "Processing",
+    "createdAt": "2026-06-16T13:50:42.231Z",
+    "_id": "ox2q4zcpqzxxcts1ui908"
+  },
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "ns450fef5koppvab4wmkm",
+        "name": "iPhone 15",
+        "quantity": 2,
+        "price": 79999,
+        "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=400"
+      }
+    ],
+    "shippingAddress": {
+      "street": "123 Test St",
+      "city": "Delhi",
+      "state": "Delhi",
+      "zipCode": "110001",
+      "country": "India"
+    },
+    "paymentMethod": "Card",
+    "totalPrice": 159998,
+    "status": "Delivered",
+    "createdAt": "2026-06-16T14:00:24.416Z",
+    "_id": "2kfhtbjxb942ceqp0wdtgh"
+  },
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "ns450fef5koppvab4wmkm",
+        "name": "iPhone 15",
+        "quantity": 1,
+        "price": 79999,
+        "image": "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=400"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Silicon university",
+      "city": "Bhubaneswar",
+      "state": "Select",
+      "zipCode": "751024",
+      "country": "India"
+    },
+    "paymentMethod": "Card",
+    "totalPrice": 79999,
+    "status": "Cancelled",
+    "createdAt": "2026-06-18T11:19:35.796Z",
+    "_id": "agr3vkfj1n56ecjjbgvo6e"
+  },
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "h00mp9tca0fsmj3z8fh9p",
+        "name": "Nike Zoom Running Shoes",
+        "quantity": 1,
+        "price": 4499,
+        "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Silicon university",
+      "city": "Bhubaneswar",
+      "state": "Select",
+      "zipCode": "751024",
+      "country": "India"
+    },
+    "paymentMethod": "COD",
+    "totalPrice": 4499,
+    "status": "Pending",
+    "createdAt": "2026-06-18T11:37:44.101Z",
+    "_id": "qlszyzolyt3s0msk6cii3"
+  },
+  {
+    "user": "5j25jle9zr7vtnlj744hin",
+    "items": [
+      {
+        "product": "o0ss4e68cecnrthj4vyby",
+        "name": "Mechanical Gaming Keyboard",
+        "quantity": 1,
+        "price": 2499,
+        "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=400"
+      }
+    ],
+    "shippingAddress": {
+      "street": "Silicon university",
+      "city": "Bhubaneswar",
+      "state": "Select",
+      "zipCode": "751024",
+      "country": "India"
+    },
+    "paymentMethod": "Razorpay",
+    "totalPrice": 2499,
+    "status": "Cancelled",
+    "createdAt": "2026-06-18T11:38:57.574Z",
+    "_id": "2ugpbc81vs6g94066jq286"
+  }
+]

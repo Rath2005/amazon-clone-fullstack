@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Clone Checkout</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Minimal Header for Checkout -->
+  <header class="main-header" style="box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <div class="nav-belt" style="justify-content: center; padding: 15px;">
+      <div class="nav-logo">
+        <a href="index.html">
+          <h1>amazon<span>clone</span></h1>
+        </a>
+      </div>
+      <div style="margin-left: 20px; font-size: 20px; font-weight: 500; color: var(--color-white);">
+        Checkout (<span id="cart-qty-header">0 items</span>)
+      </div>
+    </div>
+  </header>
+
+  <div class="checkout-layout">
+    
+    <!-- Left Panel: Address and Items -->
+    <div class="checkout-main-panel">
+      
+      <!-- Shipping Section -->
+      <div class="checkout-section">
+        <h3>1. Shipping Address</h3>
+        <form id="checkout-form" onsubmit="submitOrder(event)">
+          <div class="address-form-grid">
+            <div class="form-group">
+              <label for="street">Street Address</label>
+              <input type="text" id="street" placeholder="e.g. 123 Main St, Apartment 4B" required>
+            </div>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" placeholder="e.g. New Delhi" required>
+            </div>
+            <div class="form-group">
+              <label for="state">State / Province</label>
+              <input type="text" id="state" placeholder="e.g. Delhi" required>
+            </div>
+            <div class="form-group">
+              <label for="zipCode">ZIP / Postal Code</label>
+              <input type="text" id="zipCode" placeholder="e.g. 110001" required>
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input type="text" id="country" placeholder="e.g. India" value="India" required>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Payment Section -->
+      <div style="
+background:#fcfcfc;
+padding:15px;
+border:1px solid #ddd;
+border-radius:8px;
+">
+
+<label>
+
+<input
+type="radio"
+name="payment"
+value="COD"
+checked>
+
+Cash On Delivery
+
+</label>
+
+<br><br>
+
+<label>
+
+<input
+type="radio"
+name="payment"
+value="Razorpay">
+
+Razorpay (Demo)
+
+</label>
+
+</div>
+
+      <!-- Items Summary Section -->
+      <div class="checkout-section">
+        <h3>3. Review Items</h3>
+        <div id="checkout-items-list">
+          <!-- Populated from Cart -->
+          <div style="color: var(--color-text-muted);">Loading cart items...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Panel: Order Summary (Sticky) -->
+    <div class="checkout-sidebar">
+      <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">Order Summary</h3>
+      
+      <div class="checkout-summary-row">
+        <span>Items (<span id="summary-items-count">0</span>):</span>
+        <span id="summary-items-total">₹0</span>
+      </div>
+
+      <div class="checkout-summary-row">
+        <span>Shipping & handling:</span>
+        <span style="color: var(--color-success); font-weight: 600;">FREE</span>
+      </div>
+
+      <hr style="margin:15px 0">
+
+<div>
+  <label style="font-weight:600;">Coupon Code</label>
+
+  <div style="display:flex;gap:10px;margin-top:10px;">
+    <input
+      type="text"
+      id="coupon-code"
+      placeholder="Enter Coupon"
+      style="flex:1;padding:8px;"
+    >
+
+    <button
+      type="button"
+      onclick="applyCoupon()"
+      style="padding:8px 15px;"
+    >
+      Apply
+    </button>
+  </div>
+
+  <p
+    id="coupon-message"
+    style="margin-top:10px;font-size:14px;"
+  ></p>
+</div>
+
+<div
+  class="checkout-summary-row"
+  id="discount-row"
+  style="display:none;"
+>
+  <span>Discount:</span>
+  <span id="discount-amount">
+    ₹0
+  </span>
+</div>
+
+      <div class="checkout-summary-total">
+        <span>Order Total:</span>
+        <span id="summary-grand-total">₹0</span>
+      </div>
+
+      <button type="submit" form="checkout-form" class="checkout-btn" id="place-order-btn" style="background-color: var(--color-amber-primary); border-color: #a88734;">
+        Place Your Order
+      </button>
+
+      <div class="auth-disclaimer" style="margin-top: 15px; text-align: center;">
+        You can review your order history after purchase.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Auth Check
+    const token = localStorage.getItem("amazonToken");
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    let cartData = [];
+let totalPrice = 0;
+let discount = 0;
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function loadCheckoutDetails() {
+      try {
+        const response = await fetch("/api/cart", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          cartData = data.cart;
+          renderCheckout();
+        } else {
+          showToast(data.message || "Failed to load cart.", "error");
+        }
+      } catch (error) {
+        console.error("Checkout Load Error:", error);
+        showToast("Error retrieving cart items.", "error");
+      }
+    }
+
+    function renderCheckout() {
+      const itemsList = document.getElementById("checkout-items-list");
+      const cartQtyHeader = document.getElementById("cart-qty-header");
+      const summaryItemsCount = document.getElementById("summary-items-count");
+      const summaryItemsTotal = document.getElementById("summary-items-total");
+      const summaryGrandTotal = document.getElementById("summary-grand-total");
+
+      if (cartData.length === 0) {
+        itemsList.innerHTML = `<div class="empty-cart-message">Your cart is empty. <a href="index.html" style="color: #007185; text-decoration: none;">Go back shopping</a></div>`;
+        document.getElementById("place-order-btn").disabled = true;
+        return;
+      }
+
+      let totalItemsQty = 0;
+      totalPrice = 0;
+      let html = "";
+
+      cartData.forEach(item => {
+        const product = item.product;
+        if (!product) return;
+        
+        const itemTotal = product.price * item.quantity;
+        totalItemsQty += item.quantity;
+        totalPrice += itemTotal;
+
+        html += `
+          <div class="order-item-row">
+            <img src="${product.image}" class="order-item-img" alt="${product.name}">
+            <div class="order-item-details">
+              <h4 class="order-item-name">${product.name}</h4>
+              <p style="color: var(--color-amber-dark); font-weight: 700; margin-bottom: 5px;">₹${product.price.toLocaleString('en-IN')}</p>
+              <div class="order-item-price-qty">Quantity: <span>${item.quantity}</span></div>
+            </div>
+          </div>
+        `;
+      });
+
+      itemsList.innerHTML = html;
+      cartQtyHeader.textContent = `${totalItemsQty} item${totalItemsQty > 1 ? 's' : ''}`;
+      summaryItemsCount.textContent = totalItemsQty;
+      summaryItemsTotal.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+      discount = 0;
+
+summaryGrandTotal.textContent =
+`₹${totalPrice.toLocaleString('en-IN')}`;
+    }
+
+    function applyCoupon() {
+
+    const code =
+    document
+    .getElementById(
+      "coupon-code"
+    )
+    .value
+    .trim()
+    .toUpperCase();
+
+    const msg =
+    document.getElementById(
+      "coupon-message"
+    );
+
+    if(code === "SAVE10"){
+
+        discount =
+        totalPrice * 0.10;
+
+        msg.innerHTML =
+        "✅ SAVE10 Applied (10% OFF)";
+
+        msg.style.color =
+        "green";
+
+    }
+
+    else if(code === "WELCOME20"){
+
+        discount =
+        totalPrice * 0.20;
+
+        msg.innerHTML =
+        "✅ WELCOME20 Applied (20% OFF)";
+
+        msg.style.color =
+        "green";
+
+    }
+
+    else{
+
+        discount = 0;
+
+        msg.innerHTML =
+        "❌ Invalid Coupon";
+
+        msg.style.color =
+        "red";
+    }
+
+    updateTotal();
+}
+
+function updateTotal(){
+
+    const finalTotal =
+    totalPrice - discount;
+
+    document
+    .getElementById(
+      "summary-grand-total"
+    )
+    .textContent =
+    `₹${finalTotal.toLocaleString('en-IN')}`;
+
+    if(discount > 0){
+
+        document
+        .getElementById(
+          "discount-row"
+        )
+        .style.display =
+        "flex";
+
+        document
+        .getElementById(
+          "discount-amount"
+        )
+        .textContent =
+        `-₹${discount.toLocaleString('en-IN')}`;
+    }
+}
+
+    async function submitOrder(e) {
+      e.preventDefault();
+
+      if (cartData.length === 0) {
+        showToast("Cannot place order with an empty cart.", "error");
+        return;
+      }
+
+      const placeOrderBtn = document.getElementById("place-order-btn");
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.textContent = "Processing Order...";
+
+      const paymentMethod =
+document.querySelector(
+'input[name="payment"]:checked'
+).value;
+
+      const shippingAddress = {
+        street: document.getElementById("street").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        state: document.getElementById("state").value.trim(),
+        zipCode: document.getElementById("zipCode").value.trim(),
+        country: document.getElementById("country").value.trim()
+      };
+
+      if(paymentMethod === "Razorpay"){
+
+    const paid =
+    confirm(
+        "Demo Razorpay\n\nPay ₹" +
+        totalPrice.toLocaleString("en-IN") +
+        " ?"
+    );
+
+    if(!paid){
+
+        placeOrderBtn.disabled = false;
+        placeOrderBtn.textContent =
+        "Place Your Order";
+
+        return;
+    }
+
+    showToast(
+        "Payment Successful ✅"
+    );
+}
+
+      try {
+        const response = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+    shippingAddress,
+    paymentMethod
+})
+});
+
+        const data = await response.json();
+
+        if (data.success) {
+          showToast("Order placed successfully! Redirecting to orders...", "success");
+          setTimeout(() => {
+            window.location.href = "orders.html";
+          }, 1500);
+        } else {
+          showToast(data.message || "Order placement failed.", "error");
+          placeOrderBtn.disabled = false;
+          placeOrderBtn.textContent = "Place Your Order";
+        }
+      } catch (error) {
+        console.error("Checkout submission error:", error);
+        showToast("Server error during checkout. Please try again.", "error");
+        placeOrderBtn.disabled = false;
+        placeOrderBtn.textContent = "Place Your Order";
+      }
+    }
+
+    // Initialize
+    loadCheckoutDetails();
+  </script>
+</body>
+</html>

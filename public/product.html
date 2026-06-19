@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="main-container">
+
+    <div id="product-container">
+        <h2>Loading Product...</h2>
+    </div>
+
+    <hr style="margin:40px 0">
+
+    <h2>⭐ Customer Reviews</h2>
+
+    <div id="reviews-container">
+        Loading reviews...
+    </div>
+
+    <h3 style="margin-top:30px">
+        Write a Review
+    </h3>
+
+    <form id="review-form">
+
+        <label>Rating (1-5)</label>
+        <br>
+
+        <select id="review-rating" required>
+            <option value="">Select</option>
+            <option value="1">1 ⭐</option>
+            <option value="2">2 ⭐⭐</option>
+            <option value="3">3 ⭐⭐⭐</option>
+            <option value="4">4 ⭐⭐⭐⭐</option>
+            <option value="5">5 ⭐⭐⭐⭐⭐</option>
+        </select>
+
+        <br><br>
+
+        <label>Comment</label>
+        <br>
+
+        <textarea
+            id="review-comment"
+            rows="4"
+            style="width:100%"
+            required></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Submit Review
+        </button>
+
+    </form>
+
+    <hr style="margin:40px 0">
+
+<h2>🔥 Customers Also Viewed</h2>
+
+<hr style="margin:40px 0">
+
+<h2>🕒 Recently Viewed</h2>
+
+<div
+id="recently-viewed-container"
+style="
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+margin-top:20px;">
+</div>
+
+<div
+    id="recommendations-container"
+    style="
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+    margin-top:20px;">
+</div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const productId = params.get("id");
+
+async function loadProduct() {
+    try {
+        const response = await fetch(`/api/products/${productId}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            document.getElementById("product-container").innerHTML =
+                "<h2>Product not found</h2>";
+            return;
+        }
+
+        const p = data.product;
+        saveRecentlyViewed(p);
+
+        document.getElementById("product-container").innerHTML = `
+            <div style="display:flex;gap:40px;padding:30px;flex-wrap:wrap;">
+                
+                <div>
+                    <img src="${p.image}"
+                         alt="${p.name}"
+                         style="width:350px;border-radius:10px;">
+                </div>
+
+                <div style="max-width:500px;">
+                    <h1>${p.name}</h1>
+
+                    <p>
+                        ⭐ ${p.rating}
+                        (${p.numReviews} reviews)
+                    </p>
+
+                    <h2>₹${p.price.toLocaleString('en-IN')}</h2>
+
+                    <p>${p.description}</p>
+
+                    <p>
+                        <strong>Category:</strong>
+                        ${p.category}
+                    </p>
+
+                    <p>
+    <strong>Stock:</strong>
+
+    ${
+      p.stock > 0
+      ? `<span style="color:green">
+          ${p.stock} Available
+         </span>`
+      : `<span style="color:red">
+          Out Of Stock
+         </span>`
+    }
+</p>
+
+                    <button
+    id="add-cart-btn"
+    ${p.stock === 0 ? "disabled" : ""}
+    style="
+    padding:12px 20px;
+    margin-top:15px;
+    ${p.stock === 0
+      ? "background:#ccc;cursor:not-allowed;"
+      : ""}
+    ">
+    ${
+      p.stock === 0
+      ? "Out Of Stock"
+      : "Add To Cart"
+    }
+</button>
+
+                    <button
+                        onclick="history.back()"
+                        style="padding:12px 20px;margin-top:15px;margin-left:10px;">
+                        Back
+                    </button>
+                </div>
+
+            </div>
+        `;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+loadProduct();
+
+async function loadReviews() {
+
+    const response =
+        await fetch(
+            `/api/reviews/${productId}`
+        );
+
+    const data =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "reviews-container"
+        );
+
+    if (data.reviews.length === 0) {
+
+        container.innerHTML =
+            "<p>No reviews yet.</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+        data.reviews.map(r => `
+            <div
+            style="
+            border:1px solid #ddd;
+            padding:10px;
+            margin:10px 0;
+            border-radius:8px;">
+                <strong>
+                    ${r.username}
+                </strong>
+
+                <p>
+                    ${"⭐".repeat(r.rating)}
+                </p>
+
+                <p>
+                    ${r.comment}
+                </p>
+            </div>
+        `).join("");
+}
+
+document
+.getElementById("review-form")
+.addEventListener(
+"submit",
+async function(e) {
+
+    e.preventDefault();
+
+    const user =
+    JSON.parse(
+        localStorage.getItem(
+            "amazonUser"
+        )
+    );
+
+    const rating =
+    document.getElementById(
+        "review-rating"
+    ).value;
+
+    const comment =
+    document.getElementById(
+        "review-comment"
+    ).value;
+
+    await fetch(
+        "/api/reviews",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+            body: JSON.stringify({
+                productId,
+                username:
+                user?.username ||
+                "Anonymous",
+                rating:
+                Number(rating),
+                comment
+            })
+        }
+    );
+
+    document
+    .getElementById(
+        "review-form"
+    )
+    .reset();
+
+    loadReviews();
+});
+
+async function loadRecommendations() {
+
+    const productResponse =
+    await fetch(
+        `/api/products/${productId}`
+    );
+
+    const productData =
+    await productResponse.json();
+
+    const currentProduct =
+    productData.product;
+
+    const allProductsResponse =
+    await fetch(
+        "/api/products"
+    );
+
+    const allProductsData =
+    await allProductsResponse.json();
+
+    const recommendations =
+    allProductsData.products
+    .filter(p =>
+        p.category ===
+        currentProduct.category &&
+        p._id !==
+        currentProduct._id
+    )
+    .slice(0,4);
+
+    const container =
+    document.getElementById(
+        "recommendations-container"
+    );
+
+    if(
+      recommendations.length === 0
+    ){
+        container.innerHTML =
+        "<p>No recommendations available.</p>";
+        return;
+    }
+
+    container.innerHTML =
+    recommendations.map(p => `
+
+        <div
+        style="
+        border:1px solid #ddd;
+        border-radius:10px;
+        padding:15px;
+        text-align:center;">
+
+            <img
+            src="${p.image}"
+            style="
+            width:100%;
+            height:180px;
+            object-fit:cover;
+            border-radius:8px;">
+
+            <h4>${p.name}</h4>
+
+            <p>
+            ₹${p.price.toLocaleString('en-IN')}
+            </p>
+
+            <a
+            href="product.html?id=${p._id}">
+                View Product
+            </a>
+
+        </div>
+
+    `).join("");
+}
+
+function saveRecentlyViewed(product){
+
+    let recent =
+    JSON.parse(
+        localStorage.getItem(
+            "recentProducts"
+        )
+    ) || [];
+
+    recent =
+    recent.filter(
+        p => p._id !== product._id
+    );
+
+    recent.unshift(product);
+
+    recent =
+    recent.slice(0,5);
+
+    localStorage.setItem(
+        "recentProducts",
+        JSON.stringify(recent)
+    );
+}
+
+function loadRecentlyViewed(){
+
+    const recent =
+    JSON.parse(
+        localStorage.getItem(
+            "recentProducts"
+        )
+    ) || [];
+
+    const container =
+    document.getElementById(
+        "recently-viewed-container"
+    );
+
+    if(recent.length === 0){
+
+        container.innerHTML =
+        "<p>No recently viewed products.</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+    recent.map(p => `
+
+        <div
+        style="
+        border:1px solid #ddd;
+        border-radius:10px;
+        padding:15px;
+        text-align:center;">
+
+            <img
+            src="${p.image}"
+            style="
+            width:100%;
+            height:180px;
+            object-fit:cover;
+            border-radius:8px;">
+
+            <h4>${p.name}</h4>
+
+            <p>
+            ₹${p.price.toLocaleString('en-IN')}
+            </p>
+
+            <a
+            href="product.html?id=${p._id}">
+                View Product
+            </a>
+
+        </div>
+
+    `).join("");
+}
+
+loadProduct();
+loadReviews();
+loadRecommendations();
+loadRecentlyViewed();
+</script>
+
+
+
+</body>
+</html>

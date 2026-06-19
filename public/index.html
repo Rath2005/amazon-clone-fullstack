@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+if (!localStorage.getItem("amazonToken")) {
+    window.location.href = "login.html";
+}
+</script>
+
+
+
+  
+  <title>Amazon Clone | Deals on Electronics, Books, Fashion & More</title>
+  <link rel="stylesheet" href="style.css">
+
+  
+</head>
+<body>
+
+  <!-- Main Sticky Header -->
+  <header class="main-header">
+    <div class="nav-belt">
+      <!-- Logo -->
+      <div class="nav-logo">
+        <a href="index.html">
+          <h1>amazon<span>clone</span></h1>
+        </a>
+      </div>
+
+      <!-- Address / Location Info -->
+      <div class="nav-link-item" style="margin-left: 10px;" id="nav-location">
+        <span class="nav-link-line1">Deliver to</span>
+        <span class="nav-link-line2" id="user-location">India</span>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="nav-search">
+        <select class="nav-search-select" id="search-category" onchange="filterByCategory(this.value)">
+          <option value="All">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Fashion">Fashion</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Home">Home</option>
+          <option value="Books">Books</option>
+        </select>
+        <input type="text" class="nav-search-input" id="search-input" placeholder="Search Amazon Clone..." onkeyup="handleSearchKeyUp(event)">
+        <button class="nav-search-btn" onclick="executeSearch()">
+          <svg viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Nav Right Links -->
+      <div class="nav-links">
+        <!-- Account Info -->
+        <a href="profile.html"
+   class="nav-link-item"
+   style="text-decoration:none;color:white;">
+
+  <span class="nav-link-line1" id="nav-user-greet">
+    Hello
+  </span>
+
+  <span class="nav-link-line2">
+    My Profile
+  </span>
+
+</a>
+
+<button
+onclick="toggleDarkMode()"
+id="dark-mode-btn"
+style="
+margin-right:15px;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+">
+🌙
+</button>
+
+        <!-- Orders -->
+        <a href="orders.html" class="nav-link-item">
+          <span class="nav-link-line1">Returns</span>
+          <span class="nav-link-line2">& Orders</span>
+        </a>
+
+        <a href="wishlist.html" class="nav-link-item">
+    <span class="nav-link-line1">Your</span>
+    <span class="nav-link-line2">Wishlist ❤️</span>
+</a>
+
+        <!-- Admin Panel (shown only for admin users) -->
+        <a href="admin.html" class="nav-link-item" id="admin-nav-link" style="display: none;">
+          <span class="nav-link-line1">Admin</span>
+          <span class="nav-link-line2">Dashboard</span>
+        </a>
+
+        <!-- Cart Badge -->
+        <div class="nav-cart" onclick="toggleCartDrawer(true)" style="cursor: pointer;">
+          <div class="cart-icon-container">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="nav-cart-count" id="cart-count">0</span>
+          </div>
+          <span class="nav-cart-text">Cart</span>
+        </div>
+
+        <!-- Logout Action (Shown only if logged in) -->
+        <div class="nav-link-item" id="logout-btn" onclick="handleLogout()" style="display: none;">
+          <span class="nav-link-line1">Sign Out</span>
+          <span class="nav-link-line2">Log Out</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sub Navigation Row -->
+    <div class="nav-navigation">
+      <a href="javascript:void(0)" onclick="filterByCategory('All')">All Products</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Electronics')">Electronics</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Fashion')">Fashion</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Gaming')">Gaming</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Home')">Home</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Books')">Books</a>
+      <span style="color: #febd69; margin-left: auto; font-weight: 600; font-size: 13px;">Save up to 40% on Tech & Fashion!</span>
+    </div>
+  </header>
+
+  <!-- Hero Slideshow Banner -->
+  <div class="hero-banner" id="hero-banner">
+    <div class="hero-text">
+      <h2>Welcome to Amazon Clone</h2>
+      <p>Discover best deals every single day. Fast delivery, easy returns, and premium products customized just for you.</p>
+      <a href="#shop-now" class="hero-btn" onclick="scrollToProducts()">Shop Best Sellers</a>
+    </div>
+  </div>
+
+  <!-- Category Filter Tabs -->
+  <div class="categories-tabs">
+    <button class="tab-btn active" id="tab-All" onclick="filterByCategory('All')">All</button>
+    <button class="tab-btn" id="tab-Electronics" onclick="filterByCategory('Electronics')">Electronics</button>
+    <button class="tab-btn" id="tab-Fashion" onclick="filterByCategory('Fashion')">Fashion</button>
+    <button class="tab-btn" id="tab-Gaming" onclick="filterByCategory('Gaming')">Gaming</button>
+    <button class="tab-btn" id="tab-Home" onclick="filterByCategory('Home')">Home & Living</button>
+    <button class="tab-btn" id="tab-Books" onclick="filterByCategory('Books')">Books</button>
+  </div>
+
+  
+
+  <!-- Main Products Section -->
+  <main class="main-container" id="shop-now">
+
+    <div style="
+display:flex;
+justify-content:flex-end;
+margin:20px;
+">
+
+<select
+id="sort-products"
+onchange="sortProducts(this.value)"
+style="
+padding:10px;
+border-radius:6px;
+">
+
+<option value="">
+Sort Products
+</option>
+
+<option value="low-high">
+Price Low → High
+</option>
+
+<option value="high-low">
+Price High → Low
+</option>
+
+<option value="rating">
+Highest Rated
+</option>
+
+<option value="newest">
+Newest
+</option>
+
+</select>
+
+</div>
+    <div class="section-title">
+      <span id="category-title">Today's Deals</span>
+      <span id="results-count" style="font-size: 14px; font-weight: 500; color: var(--color-text-muted);"></span>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="products-grid">
+      <!-- Dynamically Rendered Products -->
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--color-text-muted);">
+        Loading products...
+      </div>
+    </div>
+  </main>
+
+  <!-- Sliding Cart Drawer Container -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="toggleCartDrawer(false)"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h3>Shopping Cart</h3>
+      <button class="close-drawer-btn" onclick="toggleCartDrawer(false)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="cart-drawer-items" id="cart-drawer-items">
+      <!-- Dynamically filled with cart items -->
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="cart-subtotal">
+        <span>Subtotal:</span>
+        <span id="cart-subtotal-val">₹0</span>
+      </div>
+      <a href="checkout.html" class="checkout-btn" id="checkout-btn-link">Proceed to Checkout</a>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Shared Javascript -->
+  <script src="script.js"></script>
+</body>
+</html>

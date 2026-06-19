@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Sign-In</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+
+  <a href="index.html" class="auth-logo">
+    <h1>amazon<span>clone</span></h1>
+  </a>
+
+  <div class="auth-card">
+    <h2>Sign-In</h2>
+    
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="auth-btn" id="submit-btn">Sign-In</button>
+    </form>
+
+    <div class="auth-disclaimer">
+      By continuing, you agree to Amazon's Clone Conditions of Use and Privacy Notice.
+    </div>
+  </div>
+
+  <div class="auth-divider">
+    <span>New to Amazon?</span>
+  </div>
+
+  <a href="register.html" class="new-account-btn">Create your Amazon account</a>
+
+  <footer class="auth-footer">
+    <div class="footer-links">
+      <a href="#">Conditions of Use</a>
+      <a href="#">Privacy Notice</a>
+      <a href="#">Help</a>
+    </div>
+    <div style="margin-top: 10px; color: var(--color-text-muted);">
+      &copy; 1996-2026, Amazon.com, Inc. or its affiliates
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Redirect user if they are already logged in
+    if (localStorage.getItem("amazonToken")) {
+      window.location.href = "index.html";
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const submitBtn = document.getElementById("submit-btn");
+
+      if (!email || !password) {
+        showToast("Please fill in all fields.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Signing in...";
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showToast("Login Successful! Redirecting...", "success");
+          localStorage.setItem("amazonToken", data.token);
+          localStorage.setItem("amazonUser", JSON.stringify(data.user));
+          
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 1200);
+        } else {
+          showToast(data.message || "Invalid email or password.", "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Sign-In";
+        }
+      } catch (error) {
+        console.error("Login Error:", error);
+        showToast("Server error. Please try again later.", "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Sign-In";
+      }
+    }
+  </script>
+</body>
+</html>

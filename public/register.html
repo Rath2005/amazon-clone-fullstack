@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon Registration</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-body">
+
+  <a href="index.html" class="auth-logo">
+    <h1>amazon<span>clone</span></h1>
+  </a>
+
+  <div class="auth-card">
+    <h2>Create Account</h2>
+    
+    <form id="register-form" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label for="username">Your name</label>
+        <input type="text" id="username" placeholder="First and last name" required autocomplete="name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="At least 6 characters" required autocomplete="new-password">
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" required autocomplete="new-password">
+      </div>
+
+      <button type="submit" class="auth-btn" id="submit-btn">Create Account</button>
+    </form>
+
+    <div class="auth-disclaimer" style="margin-top: 15px;">
+      By creating an account, you agree to Amazon's Clone Conditions of Use and Privacy Notice.
+    </div>
+
+    <div style="border-top: 1px solid var(--color-border); margin-top: 20px; padding-top: 15px; font-size: 13px;">
+      Already have an account? <a href="login.html" style="color: #0066c0; text-decoration: none;">Sign-In</a>
+    </div>
+  </div>
+
+  <footer class="auth-footer">
+    <div class="footer-links">
+      <a href="#">Conditions of Use</a>
+      <a href="#">Privacy Notice</a>
+      <a href="#">Help</a>
+    </div>
+    <div style="margin-top: 10px; color: var(--color-text-muted);">
+      &copy; 1996-2026, Amazon.com, Inc. or its affiliates
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Redirect if logged in
+    if (localStorage.getItem("amazonToken")) {
+      window.location.href = "index.html";
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const submitBtn = document.getElementById("submit-btn");
+
+      if (!username || !email || !password || !confirmPassword) {
+        showToast("Please fill in all fields.", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showToast("Password must be at least 6 characters long.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showToast("Passwords do not match.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating Account...";
+
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showToast("Registration Successful! Redirecting to login...", "success");
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 1500);
+        } else {
+          showToast(data.message || "Registration failed.", "error");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Create Account";
+        }
+      } catch (error) {
+        console.error("Registration Error:", error);
+        showToast("Server error. Please try again later.", "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+[
+  {
+    "_id": "admin001amazonclone",
+    "username": "Admin User",
+    "email": "admin@amazon.com",
+    "password": "$2b$10$U1R032mOKJ6rQTXaUSbhY.IhVynJ4syQ.uFLaT2padDK0/q4yc8ba",
+    "cart": [],
+    "isAdmin": true,
+    "createdAt": "2026-06-16T13:59:41.247Z"
+  },
+  {
+    "_id": "demo001amazonclone",
+    "username": "Demo User",
+    "email": "demo@amazon.com",
+    "password": "$2b$10$U1R032mOKJ6rQTXaUSbhY.t1DGqbZaP8lQpJ.sPIq3ipuGApLtiWq",
+    "cart": [],
+    "isAdmin": false,
+    "createdAt": "2026-06-16T13:59:41.248Z"
+  },
+  {
+    "_id": "5j25jle9zr7vtnlj744hin",
+    "cart": [],
+    "isAdmin": true,
+    "createdAt": "2026-06-16T17:31:38.455Z",
+    "username": "Ekalavya",
+    "email": "ekalavya393@gmail.com",
+    "password": "$2b$10$3sCmZja/62Cy6732M5d1Keqnsfi78lG8tiJmWiMxhtiw9LYB/FP4q"
+  }
+]

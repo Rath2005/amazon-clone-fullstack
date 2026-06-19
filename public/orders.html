@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Orders | Amazon Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header class="main-header">
+    <div class="nav-belt">
+      <div class="nav-logo">
+        <a href="index.html">
+          <h1>amazon<span>clone</span></h1>
+        </a>
+      </div>
+
+      <div style="flex-grow: 1; max-width: 300px; margin-left: 20px; font-size: 18px; font-weight: 500; color: var(--color-white);">
+        Your Order History
+      </div>
+
+      <div class="nav-links">
+        <a href="index.html" class="nav-link-item">
+          <span class="nav-link-line1">Back to</span>
+          <span class="nav-link-line2">Home Shopping</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="orders-container">
+    <h2 style="font-size: 26px; font-weight: 600; margin-bottom: 25px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
+      Your Orders
+    </h2>
+
+    <div id="orders-list">
+      <!-- Dynamically Rendered Order Cards -->
+      <div style="text-align: center; padding: 40px; color: var(--color-text-muted);">
+        Loading your orders...
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Auth Check
+    const token = localStorage.getItem("amazonToken");
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    async function loadOrders() {
+      try {
+        const response = await fetch("/api/orders", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          renderOrders(data.orders);
+        } else {
+          showToast(data.message || "Failed to load orders.", "error");
+        }
+      } catch (error) {
+        console.error("Load Orders Error:", error);
+        showToast("Error retrieving your orders.", "error");
+      }
+    }
+
+    function renderOrders(orders) {
+      const ordersList = document.getElementById("orders-list");
+
+      if (orders.length === 0) {
+        ordersList.innerHTML = `
+          <div style="text-align: center; padding: 40px; background-color: white; border: 1px solid var(--color-border); border-radius: var(--border-radius-md);">
+            <p style="font-size: 16px; margin-bottom: 20px; color: var(--color-text-muted);">You haven't placed any orders yet.</p>
+            <a href="index.html" class="hero-btn">Start Shopping</a>
+          </div>
+        `;
+        return;
+      }
+
+      let html = "";
+
+      orders.forEach(order => {
+        const date = new Date(order.createdAt).toLocaleDateString('en-IN', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        let itemsHtml = "";
+        order.items.forEach(item => {
+          itemsHtml += `
+            <div class="order-item-row">
+              <img src="${item.image}" class="order-item-img" alt="${item.name}">
+              <div class="order-item-details">
+                <h4 class="order-item-name">${item.name}</h4>
+                <p class="order-item-price-qty">Quantity: <span>${item.quantity}</span> &nbsp;|&nbsp; Price: <span>₹${item.price.toLocaleString('en-IN')}</span></p>
+              </div>
+            </div>
+          `;
+        });
+
+        // Determine status class
+        const statusClass = `status-${order.status.toLowerCase()}`;
+
+        // Address formatting
+        const addr = order.shippingAddress;
+        const addressStr = `${addr.street}, ${addr.city}, ${addr.state} - ${addr.zipCode}, ${addr.country}`;
+
+        html += `
+          <div class="order-card">
+            <!-- Header section containing order meta info -->
+            <div class="order-card-header">
+              <div class="order-header-info">
+                <span>ORDER PLACED</span>
+                <span class="order-header-val">${date}</span>
+              </div>
+              <div class="order-header-info">
+                <span>TOTAL</span>
+
+                <div class="order-header-info">
+  <span>PAYMENT</span>
+  <span class="order-header-val">
+    ${order.paymentMethod}
+  </span>
+</div>
+                <span class="order-header-val">₹${order.totalPrice.toLocaleString('en-IN')}</span>
+              </div>
+              <div class="order-header-info">
+                <span>SHIP TO</span>
+                <span class="order-header-val" style="cursor: help; text-decoration: underline dotted;" title="${addressStr}">
+                  ${addr.city}
+                </span>
+              </div>
+              <div class="order-header-info" style="align-items: flex-end; justify-content: center;">
+                <span>ORDER #</span>
+                <span class="order-header-val" style="font-family: monospace; font-size: 11px;">${order._id}</span>
+              </div>
+            </div>
+
+            <!-- Body section containing items and status -->
+            <div class="order-card-body">
+              <span class="order-status-badge ${statusClass}">${order.status}</span>
+              <div style="margin:15px 0;">
+
+  <div style="
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:8px;
+      font-size:13px;
+      font-weight:600;">
+
+      <span style="color:${
+          ["Pending","Processing","Shipped","Delivered"].includes(order.status)
+          ? "green" : "#999"
+      }">
+      Pending
+      </span>
+
+      <span style="color:${
+          ["Processing","Shipped","Delivered"].includes(order.status)
+          ? "green" : "#999"
+      }">
+      Processing
+      </span>
+
+      <span style="color:${
+          ["Shipped","Delivered"].includes(order.status)
+          ? "green" : "#999"
+      }">
+      Shipped
+      </span>
+
+      <span style="color:${
+          ["Delivered"].includes(order.status)
+          ? "green" : "#999"
+      }">
+      Delivered
+      </span>
+
+  </div>
+
+</div>
+
+<div style="
+height:10px;
+background:#ddd;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:15px;">
+
+<div style="
+height:100%;
+background:green;
+width:${
+    order.status === "Pending"
+    ? "25%"
+    : order.status === "Processing"
+    ? "50%"
+    : order.status === "Shipped"
+    ? "75%"
+    : order.status === "Delivered"
+    ? "100%"
+    : "0%"
+};">
+</div>
+
+</div>
+              <div class="order-items-container">
+  ${itemsHtml}
+</div>
+
+${
+  !["Delivered","Cancelled"].includes(order.status)
+  ? `
+  <button
+    onclick="cancelOrder('${order._id}')"
+    style="
+      margin-top:15px;
+      background:red;
+      color:white;
+      border:none;
+      padding:10px 15px;
+      border-radius:6px;
+      cursor:pointer;
+    ">
+    Cancel Order
+  </button>
+  `
+  : ""
+}
+            </div>
+          </div>
+        `;
+      });
+
+      ordersList.innerHTML = html;
+    }
+
+
+    async function cancelOrder(orderId){
+
+  const confirmCancel =
+  confirm(
+    "Are you sure you want to cancel this order?"
+  );
+
+  if(!confirmCancel) return;
+
+  try{
+
+    const response =
+    await fetch(
+      `/api/orders/${orderId}/cancel`,
+      {
+        method:"PUT",
+        headers:{
+          "Authorization":
+          `Bearer ${token}`
+        }
+      }
+    );
+
+    const data =
+    await response.json();
+
+    if(data.success){
+
+      showToast(
+        "Order Cancelled Successfully"
+      );
+
+      loadOrders();
+
+    }else{
+
+      showToast(
+        data.message,
+        "error"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Cancellation Failed",
+      "error"
+    );
+
+  }
+
+}
+    // Initialize
+    loadOrders();
+  </script>
+</body>
+</html>
