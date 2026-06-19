@@ -209,3 +209,12 @@ Ensure you logged in with an admin account (`admin@amazon.com` / `admin123`) aft
 ## License
 
 ISC
+
+
+# Amazon Clone Full Stack
+
+## Live Demo
+https://amazon-clone-fullstack-kir8.onrender.com
+
+## GitHub Repository
+https://github.com/Rath2005/amazon-clone-fullstack
