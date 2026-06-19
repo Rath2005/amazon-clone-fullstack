@@ -47,7 +47,7 @@ const PORT = process.env.PORT || 5000;
 (async () => {
   await connectDB();
   app.listen(PORT, () => {
-    console.log(`\n🚀 Amazon Clone Server running on http://localhost:${PORT}`);
+    console.log(`🚀 Amazon Clone Server running on PORT ${PORT}`);
     console.log(`   Mode: ${global.useLocalDB ? 'Local JSON Database' : 'MongoDB'}\n`);
   });
 })();
