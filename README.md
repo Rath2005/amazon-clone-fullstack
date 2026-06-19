@@ -1,14 +1,47 @@
 # Amazon Clone
 
+# Amazon Clone
+
+🚀 Live Demo: https://amazon-clone-fullstack-kir8.onrender.com
+
+📂 GitHub Repository: https://github.com/Rath2005/amazon-clone-fullstack
+
+A full-stack e-commerce web application inspired by Amazon...
+
 A full-stack e-commerce web application inspired by Amazon. Built with **Node.js**, **Express 5**, **JWT authentication**, and a dual-database architecture that uses **MongoDB** when available or automatically falls back to a **local JSON file database**.
 
 ## Features
 
-- **Authentication** — Register, login, JWT-protected routes, session via localStorage
-- **Product catalog** — Browse, search, and filter by category
-- **Shopping cart** — Add, update quantity, remove items (side drawer UI)
-- **Checkout & orders** — Place orders with shipping address, view order history
-- **Admin dashboard** — Manage products, update order status, view users and store stats
+### User Features
+- User Registration & Login (JWT Authentication)
+- Product Search & Category Filtering
+- Shopping Cart Management
+- Wishlist Management
+- Product Reviews & Ratings
+- Recently Viewed Products
+- Related Product Recommendations
+- Coupon Discounts (SAVE10, WELCOME20)
+- Checkout & Order Placement
+- Order Tracking Progress Bar
+- Order Cancellation
+- Profile Management
+- Dark Mode
+
+### Admin Features
+- Product Management (Add/Edit/Delete)
+- Order Management
+- User Management
+- Dashboard Analytics
+- Revenue Statistics
+- Top Product Tracking
+- Top Category Tracking
+
+### System Features
+- MongoDB + JSON Database Fallback
+- Responsive UI
+- Protected Routes
+- Role-Based Access Control
+- Render Deployment
 
 ## Tech Stack
 
@@ -210,11 +243,39 @@ Ensure you logged in with an admin account (`admin@amazon.com` / `admin123`) aft
 
 ISC
 
+## Deployment
 
-# Amazon Clone Full Stack
+This project is deployed on Render.
 
-## Live Demo
+Live URL:
 https://amazon-clone-fullstack-kir8.onrender.com
 
-## GitHub Repository
-https://github.com/Rath2005/amazon-clone-fullstack
+
+## Key Highlights
+
+- Built a complete full-stack e-commerce platform.
+- Implemented JWT-based authentication and authorization.
+- Developed admin dashboard with analytics and revenue tracking.
+- Added wishlist, reviews, coupons, and order management.
+- Deployed production-ready application on Render.
+
+## Future Enhancements
+
+- Razorpay Payment Gateway Integration
+- Email Notifications
+- Product Image Uploads
+- Real-time Inventory Management
+- AI Product Recommendations
+- MongoDB Atlas Cloud Database
+
+## Tech Stack
+
+- Node.js
+- Express.js
+- MongoDB
+- JWT
+- HTML5
+- CSS3
+- JavaScript
+- Render
+- GitHub
