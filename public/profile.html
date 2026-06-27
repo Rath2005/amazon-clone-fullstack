@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Profile</title>
+<title>My Profile | CampusKart</title>
+<meta name="description" content="Manage your CampusKart profile, view account statistics, and update your details.">
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,7 +15,7 @@
 
     <div class="nav-logo">
       <a href="index.html">
-        <h1>amazon<span>clone</span></h1>
+        <h1>Campus<span>Kart</span></h1>
       </a>
     </div>
 
@@ -37,11 +38,11 @@
       Loading...
     </div>
 
-    <hr style="margin:30px 0">
+    <hr style="margin:30px 0; border: none; border-top: 1px solid var(--color-border);">
 
     <div id="profile-stats">
 
-      <h2>Account Statistics</h2>
+      <h2 style="font-family: 'Outfit', sans-serif; font-weight: 700;">Account Statistics</h2>
 
       <div style="
         display:flex;
@@ -69,9 +70,9 @@
 
     </div>
 
-    <hr style="margin:30px 0">
+    <hr style="margin:30px 0; border: none; border-top: 1px solid var(--color-border);">
 
-    <h2>Edit Profile</h2>
+    <h2 style="font-family: 'Outfit', sans-serif; font-weight: 700;">Edit Profile</h2>
 
     <form id="profile-form">
 
@@ -79,19 +80,19 @@
         type="text"
         id="edit-name"
         placeholder="Username"
-        style="width:100%;padding:10px;margin:10px 0;"
+        style="width:100%;padding:12px 16px;margin:10px 0;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;font-size:14px;outline:none;"
       >
 
       <input
         type="email"
         id="edit-email"
         placeholder="Email"
-        style="width:100%;padding:10px;margin:10px 0;"
+        style="width:100%;padding:12px 16px;margin:10px 0;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;font-size:14px;outline:none;"
       >
 
       <button
         type="submit"
-        style="padding:12px 20px;"
+        style="padding:12px 28px;border:none;border-radius:50px;background:linear-gradient(135deg,#00d4aa,#7c3aed);color:white;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;font-size:14px;margin-top:8px;"
       >
         Update Profile
       </button>
@@ -102,9 +103,13 @@
 
 </div>
 
-<hr style="margin:30px 0">
+<div style="max-width:620px;margin:0 auto 40px;padding:0 24px;">
 
-<h2>Change Password</h2>
+<hr style="margin:30px 0; border: none; border-top: 1px solid var(--color-border);">
+
+<div class="profile-card" style="margin-top:0;">
+
+<h2 style="font-family: 'Outfit', sans-serif; font-weight: 700;">Change Password</h2>
 
 <form id="password-form">
 
@@ -112,7 +117,7 @@
     type="password"
     id="current-password"
     placeholder="Current Password"
-    style="width:100%;padding:10px;margin:10px 0;"
+    style="width:100%;padding:12px 16px;margin:10px 0;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;font-size:14px;outline:none;"
     required
   >
 
@@ -120,7 +125,7 @@
     type="password"
     id="new-password"
     placeholder="New Password"
-    style="width:100%;padding:10px;margin:10px 0;"
+    style="width:100%;padding:12px 16px;margin:10px 0;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;font-size:14px;outline:none;"
     required
   >
 
@@ -128,15 +133,22 @@
     type="password"
     id="confirm-password"
     placeholder="Confirm New Password"
-    style="width:100%;padding:10px;margin:10px 0;"
+    style="width:100%;padding:12px 16px;margin:10px 0;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;font-size:14px;outline:none;"
     required
   >
 
-  <button type="submit">
+  <button
+    type="submit"
+    style="padding:12px 28px;border:none;border-radius:50px;background:linear-gradient(135deg,#00d4aa,#7c3aed);color:white;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;font-size:14px;margin-top:8px;"
+  >
     Change Password
   </button>
 
 </form>
+
+</div>
+
+</div>
 
 <script src="profile.js"></script>
 

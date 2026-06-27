@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const CartItemSchema = new mongoose.Schema({
   product: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Product',
     required: true
   },
@@ -16,6 +16,10 @@ const CartItemSchema = new mongoose.Schema({
 });
 
 const UserSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true
+  },
   username: {
     type: String,
     required: [true, 'Please provide a username.'],

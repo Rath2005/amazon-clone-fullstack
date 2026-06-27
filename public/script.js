@@ -80,7 +80,7 @@ function updateUserNavbar() {
   } else {
     userGreet.textContent = "Hello, Sign in";
     logoutBtn.style.display = "none";
-    userLocation.textContent = "India";
+    userLocation.textContent = "Campus";
     if (accountDropdown) {
       accountDropdown.style.cursor = "pointer";
       accountDropdown.onclick = () => {
@@ -168,7 +168,7 @@ function renderProducts(products) {
     let starsHtml = "★".repeat(fullStars) + (halfStar ? "½" : "") + "☆".repeat(emptyStars);
 
     // Bestseller badge if rating is high
-    const badgeHtml = product.rating >= 4.7 ? `<div class="product-badge">Best Seller</div>` : "";
+    const badgeHtml = product.rating >= 4.7 ? `<div class="product-badge">Top Pick</div>` : "";
 
     html += `
   <div class="product-card"
@@ -233,7 +233,7 @@ function filterByCategory(category) {
   // Update section title
   const categoryTitle = document.getElementById("category-title");
   if (categoryTitle) {
-    categoryTitle.textContent = category === "All" ? "Today's Deals & Recommendations" : `${category} Hot Deals`;
+    categoryTitle.textContent = category === "All" ? "Popular on Campus" : `${category} Essentials`;
   }
 
   // Load products
@@ -310,6 +310,9 @@ function updateCartBadge() {
 
 // Add item to cart API call
 async function addProductToCart(button, productId) {
+  // Stop event from bubbling to the card's onclick
+  event.stopPropagation();
+
   if (!token) {
     showToast("Please sign in to add items.", "error");
     window.location.href = "login.html";
@@ -335,7 +338,7 @@ async function addProductToCart(button, productId) {
     if (data.success) {
       cartItems = data.cart;
       updateCartBadge();
-      showToast("Added to shopping cart! 🛒", "success");
+      showToast("Added to cart! 🛒", "success");
       
       // Animate button success state
       button.classList.add("added");
@@ -523,6 +526,7 @@ function sortProducts(sortType){
 }
 
 async function addToWishlist(productId) {
+    event.stopPropagation();
     try {
 
         const response = await fetch(
@@ -544,7 +548,7 @@ async function addToWishlist(productId) {
             body: JSON.stringify(data.product)
         });
 
-        alert("Added to wishlist ❤️");
+        showToast("Added to wishlist ❤️", "success");
 
     } catch (error) {
         console.error(error);

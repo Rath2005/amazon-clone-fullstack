@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Orders | Amazon Clone</title>
+  <title>Your Orders | CampusKart</title>
+  <meta name="description" content="View your CampusKart order history, track shipments, and manage returns.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,11 +14,11 @@
     <div class="nav-belt">
       <div class="nav-logo">
         <a href="index.html">
-          <h1>amazon<span>clone</span></h1>
+          <h1>Campus<span>Kart</span></h1>
         </a>
       </div>
 
-      <div style="flex-grow: 1; max-width: 300px; margin-left: 20px; font-size: 18px; font-weight: 500; color: var(--color-white);">
+      <div style="flex-grow: 1; max-width: 300px; margin-left: 20px; font-size: 18px; font-weight: 600; color: var(--color-white); font-family: 'Outfit', sans-serif;">
         Your Order History
       </div>
 
@@ -31,7 +32,7 @@
   </header>
 
   <div class="orders-container">
-    <h2 style="font-size: 26px; font-weight: 600; margin-bottom: 25px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
+    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 25px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; font-family: 'Outfit', sans-serif;">
       Your Orders
     </h2>
 
@@ -174,28 +175,28 @@
 
       <span style="color:${
           ["Pending","Processing","Shipped","Delivered"].includes(order.status)
-          ? "green" : "#999"
+          ? "#10b981" : "#94a3b8"
       }">
       Pending
       </span>
 
       <span style="color:${
           ["Processing","Shipped","Delivered"].includes(order.status)
-          ? "green" : "#999"
+          ? "#10b981" : "#94a3b8"
       }">
       Processing
       </span>
 
       <span style="color:${
           ["Shipped","Delivered"].includes(order.status)
-          ? "green" : "#999"
+          ? "#10b981" : "#94a3b8"
       }">
       Shipped
       </span>
 
       <span style="color:${
           ["Delivered"].includes(order.status)
-          ? "green" : "#999"
+          ? "#10b981" : "#94a3b8"
       }">
       Delivered
       </span>
@@ -205,15 +206,16 @@
 </div>
 
 <div style="
-height:10px;
-background:#ddd;
+height:8px;
+background:#e2e8f0;
 border-radius:10px;
 overflow:hidden;
 margin-bottom:15px;">
 
 <div style="
 height:100%;
-background:green;
+background: linear-gradient(135deg, #00d4aa, #7c3aed);
+border-radius:10px;
 width:${
     order.status === "Pending"
     ? "25%"
@@ -224,7 +226,8 @@ width:${
     : order.status === "Delivered"
     ? "100%"
     : "0%"
-};">
+};
+transition: width 0.5s ease;">
 </div>
 
 </div>
@@ -239,12 +242,16 @@ ${
     onclick="cancelOrder('${order._id}')"
     style="
       margin-top:15px;
-      background:red;
+      background: #ef4444;
       color:white;
       border:none;
-      padding:10px 15px;
-      border-radius:6px;
+      padding:10px 20px;
+      border-radius:50px;
       cursor:pointer;
+      font-weight:700;
+      font-family:'Outfit',sans-serif;
+      font-size:13px;
+      transition: all 0.2s;
     ">
     Cancel Order
   </button>

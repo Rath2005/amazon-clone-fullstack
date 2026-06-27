@@ -9,13 +9,9 @@ if (!localStorage.getItem("amazonToken")) {
 }
 </script>
 
-
-
-  
-  <title>Amazon Clone | Deals on Electronics, Books, Fashion & More</title>
+  <title>CampusKart | Electronics, Components & College Essentials</title>
+  <meta name="description" content="CampusKart — your one-stop shop for college essentials. Electronics, sensors, Arduino, ESP32, stationery, books, and campus lifestyle products at student-friendly prices.">
   <link rel="stylesheet" href="style.css">
-
-  
 </head>
 <body>
 
@@ -25,14 +21,14 @@ if (!localStorage.getItem("amazonToken")) {
       <!-- Logo -->
       <div class="nav-logo">
         <a href="index.html">
-          <h1>amazon<span>clone</span></h1>
+          <h1>Campus<span>Kart</span></h1>
         </a>
       </div>
 
       <!-- Address / Location Info -->
       <div class="nav-link-item" style="margin-left: 10px;" id="nav-location">
         <span class="nav-link-line1">Deliver to</span>
-        <span class="nav-link-line2" id="user-location">India</span>
+        <span class="nav-link-line2" id="user-location">Campus</span>
       </div>
 
       <!-- Search Bar -->
@@ -40,12 +36,12 @@ if (!localStorage.getItem("amazonToken")) {
         <select class="nav-search-select" id="search-category" onchange="filterByCategory(this.value)">
           <option value="All">All Categories</option>
           <option value="Electronics">Electronics</option>
-          <option value="Fashion">Fashion</option>
-          <option value="Gaming">Gaming</option>
-          <option value="Home">Home</option>
+          <option value="Components">Components</option>
+          <option value="Stationery">Stationery</option>
           <option value="Books">Books</option>
+          <option value="Lifestyle">Lifestyle</option>
         </select>
-        <input type="text" class="nav-search-input" id="search-input" placeholder="Search Amazon Clone..." onkeyup="handleSearchKeyUp(event)">
+        <input type="text" class="nav-search-input" id="search-input" placeholder="Search CampusKart..." onkeyup="handleSearchKeyUp(event)">
         <button class="nav-search-btn" onclick="executeSearch()">
           <svg viewBox="0 0 24 24">
             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -74,11 +70,15 @@ if (!localStorage.getItem("amazonToken")) {
 onclick="toggleDarkMode()"
 id="dark-mode-btn"
 style="
-margin-right:15px;
+margin-right:8px;
 padding:8px 12px;
 border:none;
-border-radius:6px;
+border-radius:50%;
 cursor:pointer;
+background: rgba(255,255,255,0.15);
+color: white;
+font-size: 16px;
+transition: background 0.2s;
 ">
 🌙
 </button>
@@ -125,20 +125,20 @@ cursor:pointer;
     <div class="nav-navigation">
       <a href="javascript:void(0)" onclick="filterByCategory('All')">All Products</a>
       <a href="javascript:void(0)" onclick="filterByCategory('Electronics')">Electronics</a>
-      <a href="javascript:void(0)" onclick="filterByCategory('Fashion')">Fashion</a>
-      <a href="javascript:void(0)" onclick="filterByCategory('Gaming')">Gaming</a>
-      <a href="javascript:void(0)" onclick="filterByCategory('Home')">Home</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Components')">Components</a>
+      <a href="javascript:void(0)" onclick="filterByCategory('Stationery')">Stationery</a>
       <a href="javascript:void(0)" onclick="filterByCategory('Books')">Books</a>
-      <span style="color: #febd69; margin-left: auto; font-weight: 600; font-size: 13px;">Save up to 40% on Tech & Fashion!</span>
+      <a href="javascript:void(0)" onclick="filterByCategory('Lifestyle')">Lifestyle</a>
+      <span style="color: var(--color-accent-teal); margin-left: auto; font-weight: 600; font-size: 13px;">🎓 Student discounts on electronics & components!</span>
     </div>
   </header>
 
   <!-- Hero Slideshow Banner -->
   <div class="hero-banner" id="hero-banner">
     <div class="hero-text">
-      <h2>Welcome to Amazon Clone</h2>
-      <p>Discover best deals every single day. Fast delivery, easy returns, and premium products customized just for you.</p>
-      <a href="#shop-now" class="hero-btn" onclick="scrollToProducts()">Shop Best Sellers</a>
+      <h2>Welcome to CampusKart 🎓</h2>
+      <p>Your one-stop shop for everything campus life needs — from ESP32 boards and sensors to textbooks and study essentials. Built by students, for students.</p>
+      <a href="#shop-now" class="hero-btn" onclick="scrollToProducts()">Explore Student Picks</a>
     </div>
   </div>
 
@@ -146,10 +146,10 @@ cursor:pointer;
   <div class="categories-tabs">
     <button class="tab-btn active" id="tab-All" onclick="filterByCategory('All')">All</button>
     <button class="tab-btn" id="tab-Electronics" onclick="filterByCategory('Electronics')">Electronics</button>
-    <button class="tab-btn" id="tab-Fashion" onclick="filterByCategory('Fashion')">Fashion</button>
-    <button class="tab-btn" id="tab-Gaming" onclick="filterByCategory('Gaming')">Gaming</button>
-    <button class="tab-btn" id="tab-Home" onclick="filterByCategory('Home')">Home & Living</button>
+    <button class="tab-btn" id="tab-Components" onclick="filterByCategory('Components')">Components</button>
+    <button class="tab-btn" id="tab-Stationery" onclick="filterByCategory('Stationery')">Stationery</button>
     <button class="tab-btn" id="tab-Books" onclick="filterByCategory('Books')">Books</button>
+    <button class="tab-btn" id="tab-Lifestyle" onclick="filterByCategory('Lifestyle')">Lifestyle</button>
   </div>
 
   
@@ -160,15 +160,21 @@ cursor:pointer;
     <div style="
 display:flex;
 justify-content:flex-end;
-margin:20px;
+margin:20px 0;
 ">
 
 <select
 id="sort-products"
 onchange="sortProducts(this.value)"
 style="
-padding:10px;
-border-radius:6px;
+padding:10px 16px;
+border-radius:50px;
+border: 1.5px solid #e2e8f0;
+font-family: 'Outfit', sans-serif;
+font-weight: 600;
+font-size: 13px;
+cursor: pointer;
+outline: none;
 ">
 
 <option value="">
@@ -195,7 +201,7 @@ Newest
 
 </div>
     <div class="section-title">
-      <span id="category-title">Today's Deals</span>
+      <span id="category-title">Popular on Campus</span>
       <span id="results-count" style="font-size: 14px; font-weight: 500; color: var(--color-text-muted);"></span>
     </div>
 

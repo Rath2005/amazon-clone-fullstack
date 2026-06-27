@@ -3,10 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details</title>
+    <title>Product Details | CampusKart</title>
+    <meta name="description" content="View product details, reviews, and recommendations on CampusKart.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<header class="main-header">
+  <div class="nav-belt">
+    <div class="nav-logo">
+      <a href="index.html">
+        <h1>Campus<span>Kart</span></h1>
+      </a>
+    </div>
+    <div style="margin-left:auto">
+      <a href="index.html" class="nav-link-item">
+        Back to Store
+      </a>
+    </div>
+  </div>
+</header>
 
 <div class="main-container">
 
@@ -14,24 +30,24 @@
         <h2>Loading Product...</h2>
     </div>
 
-    <hr style="margin:40px 0">
+    <hr style="margin:40px 0; border:none; border-top:1px solid var(--color-border);">
 
-    <h2>⭐ Customer Reviews</h2>
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:700;">⭐ Customer Reviews</h2>
 
-    <div id="reviews-container">
+    <div id="reviews-container" style="margin-top:16px;">
         Loading reviews...
     </div>
 
-    <h3 style="margin-top:30px">
+    <h3 style="margin-top:30px;font-family:'Outfit',sans-serif;font-weight:700;">
         Write a Review
     </h3>
 
-    <form id="review-form">
+    <form id="review-form" style="margin-top:16px;">
 
-        <label>Rating (1-5)</label>
+        <label style="font-weight:600;font-family:'Outfit',sans-serif;">Rating (1-5)</label>
         <br>
 
-        <select id="review-rating" required>
+        <select id="review-rating" required style="padding:10px 14px;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;margin:8px 0;outline:none;">
             <option value="">Select</option>
             <option value="1">1 ⭐</option>
             <option value="2">2 ⭐⭐</option>
@@ -42,30 +58,40 @@
 
         <br><br>
 
-        <label>Comment</label>
+        <label style="font-weight:600;font-family:'Outfit',sans-serif;">Comment</label>
         <br>
 
         <textarea
             id="review-comment"
             rows="4"
-            style="width:100%"
+            style="width:100%;padding:12px 14px;border:1.5px solid var(--color-border);border-radius:var(--border-radius-sm);font-family:inherit;margin:8px 0;outline:none;resize:vertical;"
             required></textarea>
 
         <br><br>
 
-        <button type="submit">
+        <button type="submit" style="padding:12px 28px;border:none;border-radius:50px;background:linear-gradient(135deg,#00d4aa,#7c3aed);color:white;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;font-size:14px;">
             Submit Review
         </button>
 
     </form>
 
-    <hr style="margin:40px 0">
+    <hr style="margin:40px 0; border:none; border-top:1px solid var(--color-border);">
 
-<h2>🔥 Customers Also Viewed</h2>
+<h2 style="font-family:'Outfit',sans-serif;font-weight:700;">🔥 Students Also Viewed</h2>
 
-<hr style="margin:40px 0">
+<div
+id="recommendations-container"
+style="
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(220px,1fr));
+gap:20px;
+margin-top:20px;">
+</div>
 
-<h2>🕒 Recently Viewed</h2>
+<hr style="margin:40px 0; border:none; border-top:1px solid var(--color-border);">
+
+<h2 style="font-family:'Outfit',sans-serif;font-weight:700;">🕒 Recently Viewed</h2>
 
 <div
 id="recently-viewed-container"
@@ -75,16 +101,6 @@ grid-template-columns:
 repeat(auto-fill,minmax(220px,1fr));
 gap:20px;
 margin-top:20px;">
-</div>
-
-<div
-    id="recommendations-container"
-    style="
-    display:grid;
-    grid-template-columns:
-    repeat(auto-fill,minmax(220px,1fr));
-    gap:20px;
-    margin-top:20px;">
 </div>
 
 </div>
@@ -110,52 +126,59 @@ async function loadProduct() {
         document.getElementById("product-container").innerHTML = `
             <div style="display:flex;gap:40px;padding:30px;flex-wrap:wrap;">
                 
-                <div>
+                <div style="flex:1;min-width:280px;">
                     <img src="${p.image}"
                          alt="${p.name}"
-                         style="width:350px;border-radius:10px;">
+                         style="width:100%;max-width:400px;border-radius:var(--border-radius-md);box-shadow:0 8px 32px rgba(0,0,0,0.08);">
                 </div>
 
-                <div style="max-width:500px;">
-                    <h1>${p.name}</h1>
+                <div style="flex:1;min-width:300px;max-width:520px;">
+                    <h1 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:28px;margin-bottom:12px;">${p.name}</h1>
 
-                    <p>
+                    <p style="font-size:15px;color:var(--color-text-muted);margin-bottom:8px;">
                         ⭐ ${p.rating}
                         (${p.numReviews} reviews)
                     </p>
 
-                    <h2>₹${p.price.toLocaleString('en-IN')}</h2>
+                    <h2 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:32px;background:linear-gradient(135deg,#00d4aa,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;">₹${p.price.toLocaleString('en-IN')}</h2>
 
-                    <p>${p.description}</p>
+                    <p style="font-size:15px;line-height:1.7;margin-bottom:16px;">${p.description}</p>
 
-                    <p>
+                    <p style="margin-bottom:8px;">
                         <strong>Category:</strong>
-                        ${p.category}
+                        <span style="background:rgba(124,58,237,0.1);color:#7c3aed;padding:4px 12px;border-radius:50px;font-size:13px;font-weight:600;">${p.category}</span>
                     </p>
 
-                    <p>
+                    <p style="margin-bottom:20px;">
     <strong>Stock:</strong>
 
     ${
       p.stock > 0
-      ? `<span style="color:green">
+      ? `<span style="color:#10b981;font-weight:600;">
           ${p.stock} Available
          </span>`
-      : `<span style="color:red">
+      : `<span style="color:#ef4444;font-weight:600;">
           Out Of Stock
          </span>`
     }
 </p>
 
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
                     <button
     id="add-cart-btn"
+    onclick="addToCartFromDetail('${p._id}')"
     ${p.stock === 0 ? "disabled" : ""}
     style="
-    padding:12px 20px;
-    margin-top:15px;
+    padding:14px 32px;
+    border:none;
+    border-radius:50px;
+    font-weight:700;
+    font-family:'Outfit',sans-serif;
+    font-size:15px;
+    cursor:pointer;
     ${p.stock === 0
-      ? "background:#ccc;cursor:not-allowed;"
-      : ""}
+      ? "background:#cbd5e1;color:#94a3b8;cursor:not-allowed;"
+      : "background:linear-gradient(135deg,#00d4aa,#7c3aed);color:white;"}
     ">
     ${
       p.stock === 0
@@ -166,15 +189,56 @@ async function loadProduct() {
 
                     <button
                         onclick="history.back()"
-                        style="padding:12px 20px;margin-top:15px;margin-left:10px;">
+                        style="padding:14px 32px;border:1.5px solid var(--color-border);border-radius:50px;background:white;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;font-size:15px;">
                         Back
                     </button>
+                    </div>
                 </div>
 
             </div>
         `;
     } catch (err) {
         console.error(err);
+    }
+}
+
+async function addToCartFromDetail(pid) {
+    const token = localStorage.getItem("amazonToken");
+    if (!token) {
+        alert("Please sign in first");
+        window.location.href = "login.html";
+        return;
+    }
+    const btn = document.getElementById("add-cart-btn");
+    btn.disabled = true;
+    btn.textContent = "Adding...";
+    try {
+        const res = await fetch("/api/cart/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ productId: pid, quantity: 1 })
+        });
+        const data = await res.json();
+        if (data.success) {
+            btn.textContent = "Added ✔";
+            btn.style.background = "linear-gradient(135deg, #10b981, #059669)";
+            setTimeout(() => {
+                btn.textContent = "Add To Cart";
+                btn.style.background = "linear-gradient(135deg, #00d4aa, #7c3aed)";
+                btn.disabled = false;
+            }, 1500);
+        } else {
+            alert(data.message || "Failed to add");
+            btn.textContent = "Add To Cart";
+            btn.disabled = false;
+        }
+    } catch(e) {
+        console.error(e);
+        btn.textContent = "Add To Cart";
+        btn.disabled = false;
     }
 }
 
@@ -198,7 +262,7 @@ async function loadReviews() {
     if (data.reviews.length === 0) {
 
         container.innerHTML =
-            "<p>No reviews yet.</p>";
+            "<p style='color:var(--color-text-muted);'>No reviews yet. Be the first to review!</p>";
 
         return;
     }
@@ -207,19 +271,20 @@ async function loadReviews() {
         data.reviews.map(r => `
             <div
             style="
-            border:1px solid #ddd;
-            padding:10px;
-            margin:10px 0;
-            border-radius:8px;">
-                <strong>
+            border:1px solid var(--color-border);
+            padding:16px;
+            margin:12px 0;
+            border-radius:var(--border-radius-md);
+            background:white;">
+                <strong style="font-family:'Outfit',sans-serif;">
                     ${r.username}
                 </strong>
 
-                <p>
+                <p style="color:var(--color-gold);margin:4px 0;">
                     ${"⭐".repeat(r.rating)}
                 </p>
 
-                <p>
+                <p style="color:var(--color-text-muted);line-height:1.6;">
                     ${r.comment}
                 </p>
             </div>
@@ -320,7 +385,7 @@ async function loadRecommendations() {
       recommendations.length === 0
     ){
         container.innerHTML =
-        "<p>No recommendations available.</p>";
+        "<p style='color:var(--color-text-muted);'>No recommendations available.</p>";
         return;
     }
 
@@ -329,28 +394,36 @@ async function loadRecommendations() {
 
         <div
         style="
-        border:1px solid #ddd;
-        border-radius:10px;
-        padding:15px;
-        text-align:center;">
+        border:1px solid var(--color-border);
+        border-radius:var(--border-radius-md);
+        padding:16px;
+        text-align:center;
+        background:white;
+        transition:transform 0.2s, box-shadow 0.2s;
+        cursor:pointer;"
+        onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
 
             <img
             src="${p.image}"
             style="
             width:100%;
             height:180px;
-            object-fit:cover;
-            border-radius:8px;">
+            object-fit:contain;
+            border-radius:var(--border-radius-sm);
+            background:#f8fafc;
+            padding:8px;">
 
-            <h4>${p.name}</h4>
+            <h4 style="font-family:'Outfit',sans-serif;margin:12px 0 8px;font-size:14px;">${p.name}</h4>
 
-            <p>
+            <p style="font-weight:700;color:var(--color-accent-purple);margin-bottom:8px;">
             ₹${p.price.toLocaleString('en-IN')}
             </p>
 
             <a
-            href="product.html?id=${p._id}">
-                View Product
+            href="product.html?id=${p._id}"
+            style="color:var(--color-accent-teal);text-decoration:none;font-weight:600;font-size:13px;">
+                View Product →
             </a>
 
         </div>
@@ -400,7 +473,7 @@ function loadRecentlyViewed(){
     if(recent.length === 0){
 
         container.innerHTML =
-        "<p>No recently viewed products.</p>";
+        "<p style='color:var(--color-text-muted);'>No recently viewed products.</p>";
 
         return;
     }
@@ -410,28 +483,36 @@ function loadRecentlyViewed(){
 
         <div
         style="
-        border:1px solid #ddd;
-        border-radius:10px;
-        padding:15px;
-        text-align:center;">
+        border:1px solid var(--color-border);
+        border-radius:var(--border-radius-md);
+        padding:16px;
+        text-align:center;
+        background:white;
+        transition:transform 0.2s, box-shadow 0.2s;
+        cursor:pointer;"
+        onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.08)'"
+        onmouseout="this.style.transform='';this.style.boxShadow=''">
 
             <img
             src="${p.image}"
             style="
             width:100%;
             height:180px;
-            object-fit:cover;
-            border-radius:8px;">
+            object-fit:contain;
+            border-radius:var(--border-radius-sm);
+            background:#f8fafc;
+            padding:8px;">
 
-            <h4>${p.name}</h4>
+            <h4 style="font-family:'Outfit',sans-serif;margin:12px 0 8px;font-size:14px;">${p.name}</h4>
 
-            <p>
+            <p style="font-weight:700;color:var(--color-accent-purple);margin-bottom:8px;">
             ₹${p.price.toLocaleString('en-IN')}
             </p>
 
             <a
-            href="product.html?id=${p._id}">
-                View Product
+            href="product.html?id=${p._id}"
+            style="color:var(--color-accent-teal);text-decoration:none;font-weight:600;font-size:13px;">
+                View Product →
             </a>
 
         </div>

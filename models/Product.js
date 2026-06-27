@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const ProductSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: [true, 'Please add a product name.'],
@@ -22,7 +26,7 @@ const ProductSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Please specify a category.'],
-    enum: ['Electronics', 'Fashion', 'Gaming', 'Home', 'Books']
+    enum: ['Electronics', 'Components', 'Stationery', 'Books', 'Lifestyle']
   },
   stock: {
     type: Number,

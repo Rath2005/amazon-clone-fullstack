@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amazon Clone Checkout</title>
+  <title>CampusKart Checkout</title>
+  <meta name="description" content="Complete your CampusKart order — review items, add shipping address, and place your order.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,10 +14,10 @@
     <div class="nav-belt" style="justify-content: center; padding: 15px;">
       <div class="nav-logo">
         <a href="index.html">
-          <h1>amazon<span>clone</span></h1>
+          <h1>Campus<span>Kart</span></h1>
         </a>
       </div>
-      <div style="margin-left: 20px; font-size: 20px; font-weight: 500; color: var(--color-white);">
+      <div style="margin-left: 20px; font-size: 20px; font-weight: 600; color: var(--color-white); font-family: 'Outfit', sans-serif;">
         Checkout (<span id="cart-qty-header">0 items</span>)
       </div>
     </div>
@@ -58,35 +59,30 @@
 
       <!-- Payment Section -->
       <div style="
-background:#fcfcfc;
-padding:15px;
-border:1px solid #ddd;
-border-radius:8px;
+background: #f8fafc;
+padding:18px;
+border:1px solid var(--color-border);
+border-radius: var(--border-radius-md);
+margin-bottom: 24px;
 ">
 
-<label>
+<h3 style="font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 14px; color: var(--color-primary-dark);">2. Payment Method</h3>
 
+<label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 10px;">
 <input
 type="radio"
 name="payment"
 value="COD"
 checked>
-
 Cash On Delivery
-
 </label>
 
-<br><br>
-
-<label>
-
+<label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
 <input
 type="radio"
 name="payment"
 value="Razorpay">
-
 Razorpay (Demo)
-
 </label>
 
 </div>
@@ -104,7 +100,7 @@ Razorpay (Demo)
 
     <!-- Right Panel: Order Summary (Sticky) -->
     <div class="checkout-sidebar">
-      <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px;">Order Summary</h3>
+      <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 15px; font-family: 'Outfit', sans-serif;">Order Summary</h3>
       
       <div class="checkout-summary-row">
         <span>Items (<span id="summary-items-count">0</span>):</span>
@@ -116,23 +112,23 @@ Razorpay (Demo)
         <span style="color: var(--color-success); font-weight: 600;">FREE</span>
       </div>
 
-      <hr style="margin:15px 0">
+      <hr style="margin:15px 0; border: none; border-top: 1px solid var(--color-border);">
 
 <div>
-  <label style="font-weight:600;">Coupon Code</label>
+  <label style="font-weight:700; font-family: 'Outfit', sans-serif;">Coupon Code</label>
 
   <div style="display:flex;gap:10px;margin-top:10px;">
     <input
       type="text"
       id="coupon-code"
       placeholder="Enter Coupon"
-      style="flex:1;padding:8px;"
+      style="flex:1;padding:10px 14px;border:1.5px solid var(--color-border);border-radius:50px;font-family:inherit;outline:none;"
     >
 
     <button
       type="button"
       onclick="applyCoupon()"
-      style="padding:8px 15px;"
+      style="padding:10px 20px;border:none;border-radius:50px;background:var(--color-accent-gradient);color:white;font-weight:700;font-family:'Outfit',sans-serif;cursor:pointer;"
     >
       Apply
     </button>
@@ -160,7 +156,7 @@ Razorpay (Demo)
         <span id="summary-grand-total">₹0</span>
       </div>
 
-      <button type="submit" form="checkout-form" class="checkout-btn" id="place-order-btn" style="background-color: var(--color-amber-primary); border-color: #a88734;">
+      <button type="submit" form="checkout-form" class="checkout-btn" id="place-order-btn">
         Place Your Order
       </button>
 
@@ -228,7 +224,7 @@ let discount = 0;
       const summaryGrandTotal = document.getElementById("summary-grand-total");
 
       if (cartData.length === 0) {
-        itemsList.innerHTML = `<div class="empty-cart-message">Your cart is empty. <a href="index.html" style="color: #007185; text-decoration: none;">Go back shopping</a></div>`;
+        itemsList.innerHTML = `<div class="empty-cart-message">Your cart is empty. <a href="index.html" style="color: var(--color-accent-purple); text-decoration: none; font-weight: 600;">Go back shopping</a></div>`;
         document.getElementById("place-order-btn").disabled = true;
         return;
       }
@@ -250,7 +246,7 @@ let discount = 0;
             <img src="${product.image}" class="order-item-img" alt="${product.name}">
             <div class="order-item-details">
               <h4 class="order-item-name">${product.name}</h4>
-              <p style="color: var(--color-amber-dark); font-weight: 700; margin-bottom: 5px;">₹${product.price.toLocaleString('en-IN')}</p>
+              <p style="color: var(--color-accent-purple); font-weight: 700; margin-bottom: 5px;">₹${product.price.toLocaleString('en-IN')}</p>
               <div class="order-item-price-qty">Quantity: <span>${item.quantity}</span></div>
             </div>
           </div>
@@ -292,7 +288,7 @@ summaryGrandTotal.textContent =
         "✅ SAVE10 Applied (10% OFF)";
 
         msg.style.color =
-        "green";
+        "#10b981";
 
     }
 
@@ -305,7 +301,20 @@ summaryGrandTotal.textContent =
         "✅ WELCOME20 Applied (20% OFF)";
 
         msg.style.color =
-        "green";
+        "#10b981";
+
+    }
+
+    else if(code === "CAMPUS15"){
+
+        discount =
+        totalPrice * 0.15;
+
+        msg.innerHTML =
+        "✅ CAMPUS15 Applied (15% OFF)";
+
+        msg.style.color =
+        "#10b981";
 
     }
 
@@ -317,7 +326,7 @@ summaryGrandTotal.textContent =
         "❌ Invalid Coupon";
 
         msg.style.color =
-        "red";
+        "#ef4444";
     }
 
     updateTotal();
